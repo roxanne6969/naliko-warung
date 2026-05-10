@@ -35,7 +35,7 @@
                         type="email"
                         id="email"
                         wire:model="email"
-                        placeholder="admin@example.com"
+                        placeholder="test@example.com"
                         class="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-600 transition"
                         required
                     />
