@@ -15,8 +15,8 @@
                 🍽️ Naliko Warung
             </a>
             <div class="flex gap-4 items-center">
-                <a href="{{ route('menu.index') }}" class="text-[#F7E6CC] hover:text-orange-500 text-sm">Menu</a>
-                <a href="{{ route('cart') }}" class="text-[#F7E6CC] hover:text-orange-500 text-sm">🛒 Keranjang</a>
+                <a href="{{ route('menu.index') }}" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">Menu</a>
+                <a href="{{ route('cart') }}" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">🛒 Keranjang</a>
 
                 @auth
                     @if(auth()->user()->isAdmin())
@@ -33,7 +33,7 @@
 
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="text-[#F7E6CC] hover:text-red-500 text-sm">Logout</button>
+                        <button class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">Logout</button>
                     </form>
                 @else
                     <a href="{{ route('login') }}" 

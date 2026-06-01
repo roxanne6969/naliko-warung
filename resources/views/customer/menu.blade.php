@@ -5,7 +5,7 @@
 @section('content')
 
 {{-- Hero --}}
-<div class="bg-orange-500 rounded-2xl p-8 mb-8 text-white text-center">
+<div class="bg-[#7A6247] rounded-2xl p-8 mb-8 text-[#F7E6CC] text-center">
     <h1 class="text-3xl font-bold mb-2">🍽️ Naliko Warung</h1>
     <p class="text-orange-100">Pesan makanan & minuman favoritmu dengan mudah!</p>
 </div>
@@ -13,12 +13,12 @@
 {{-- Filter Kategori --}}
 <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
     <button onclick="filterCategory('all')" 
-        class="category-btn active px-4 py-2 rounded-full bg-orange-500 text-white text-sm whitespace-nowrap">
+        class="category-btn active px-4 py-2 rounded-full bg-[#7A6247] text-[#F7E6CC] text-sm whitespace-nowrap">
         Semua
     </button>
     @foreach($categories as $category)
     <button onclick="filterCategory('{{ $category->id }}')"
-        class="category-btn px-4 py-2 rounded-full bg-white text-gray-600 text-sm whitespace-nowrap shadow">
+        class="category-btn px-4 py-2 rounded-full bg-[#9C8462] text-[#F5E6D0] text-sm whitespace-nowrap shadow">
         {{ $category->name }}
     </button>
     @endforeach
@@ -27,7 +27,7 @@
 {{-- Produk --}}
 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="product-grid">
     @foreach($products as $product)
-    <div class="product-card bg-white rounded-xl shadow p-4 cursor-pointer hover:shadow-md transition"
+    <div class="product-card bg-[#F5E2C7] rounded-xl shadow p-4 cursor-pointer hover:shadow-md transition"
         data-category="{{ $product->category_id }}"
         onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }})">
         
@@ -40,10 +40,10 @@
         </div>
 
         <h3 class="font-semibold text-gray-800 text-sm">{{ $product->name }}</h3>
-        <p class="text-orange-500 font-bold text-sm mt-1">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+        <p class="text-[#cca978] font-bold text-sm mt-1">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
         <p class="text-gray-400 text-xs mt-1">Stok: {{ $product->stock }}</p>
 
-        <button class="w-full mt-3 bg-orange-500 text-white py-1.5 rounded-lg text-sm hover:bg-orange-600 transition">
+        <button class="w-full mt-3 bg-[#9C8462] text-white py-1.5 rounded-lg text-sm hover:bg-[#7A6247] transition">
             + Tambah
         </button>
     </div>
@@ -53,7 +53,7 @@
 {{-- Cart Float Button --}}
 <div id="cart-float" class="fixed bottom-6 right-6 hidden">
     <a href="{{ route('cart') }}" 
-        class="bg-orange-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-orange-600 transition">
+        class="bg-[#9C8462] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-[#7A6247] transition">
         🛒 <span id="cart-count">0</span> item
     </a>
 </div>
@@ -94,11 +94,11 @@
             card.style.display = (id === 'all' || card.dataset.category == id) ? 'block' : 'none';
         });
         document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.classList.remove('bg-orange-500', 'text-white');
-            btn.classList.add('bg-white', 'text-gray-600');
+            btn.classList.remove('bg-[#7A6247]', 'text-[#F7E6CC]');
+            btn.classList.add('bg-[#9C8462]', 'text-[#F5E6D0]');
         });
-        event.target.classList.add('bg-orange-500', 'text-white');
-        event.target.classList.remove('bg-white', 'text-gray-600');
+        event.target.classList.add('bg-[#7A6247]', 'text-[#F7E6CC]');
+        event.target.classList.remove('bg-[#9C8462]', 'text-[#F5E6D0]');
     }
 </script>
 
