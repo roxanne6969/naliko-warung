@@ -45,12 +45,14 @@ class TransactionController extends Controller
             $total += $item['price'] * $item['qty'];
         }
 
-        $transaction = Transaction::create([
+            $transaction = Transaction::create([
             'user_id' => auth()->id(),
             'order_id' => $request->order_id ?? null,
             'total' => $total,
             'paid' => $request->paid,
             'change' => $request->paid - $total,
+            'metode' => $request->metode ?? 'Cash',
+            'metode' => $request->metode ?? 'Cash',
         ]);
 
         foreach ($items as $item) {
@@ -66,5 +68,12 @@ class TransactionController extends Controller
         }
 
         return response()->json(['success' => true, 'transaction_id' => $transaction->id]);
+    }
+    public function history()
+    {
+        $transactions = Transaction::with('user', 'items.product')
+            ->latest()
+            ->paginate(10);
+        return view('kasir.history', compact('transactions'));
     }
 }

@@ -15,7 +15,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     {{-- Form Tambah --}}
-    <div class="bg-[#F5E2C7] rounded-xl shadow p-6">
+    <div class="bg-white rounded-xl shadow p-6">
         <h3 class="font-bold text-gray-800 mb-4">Tambah Kategori</h3>
         <form action="{{ route('categories.store') }}" method="POST" class="flex gap-3">
             @csrf
@@ -28,7 +28,7 @@
     </div>
 
     {{-- List Kategori --}}
-    <div class="bg-[#F5E2C7] rounded-xl shadow p-6">
+    <div class="bg-white rounded-xl shadow p-6">
         <h3 class="font-bold text-gray-800 mb-4">Daftar Kategori</h3>
         <div class="space-y-2">
             @foreach($categories as $category)

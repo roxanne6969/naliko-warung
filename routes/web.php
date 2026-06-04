@@ -42,4 +42,7 @@ Route::prefix('kasir')->middleware(['auth', 'kasir'])->group(function () {
     Route::post('/orders/{order}/confirm', [TransactionController::class, 'confirm'])->name('kasir.orders.confirm');
     Route::get('/transaction', [TransactionController::class, 'index'])->name('kasir.transaction');
     Route::post('/transaction', [TransactionController::class, 'store'])->name('kasir.transaction.store');
+    Route::get('/history', [TransactionController::class, 'history'])->name('kasir.history');
+    Route::get('/stok', [TransactionController::class, 'stok'])->name('kasir.stok');
+    Route::post('/stok/{product}', [TransactionController::class, 'updateStok'])->name('kasir.stok.update');
 });
