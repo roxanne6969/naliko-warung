@@ -32,37 +32,9 @@ class TransactionController extends Controller
         $status = $request->status;
         $order->update(['status' => $status]);
 
-        // When order is marked as done, create a Transaction record
-        if ($status === 'done') {
-            $order->load('items');
+        // Catatan: Transaksi & pengurangan stok sudah dilakukan di PaymentVerifController
+        // saat kasir memverifikasi pembayaran (Approve).
 
-            // Only create transaction if one doesn't already exist for this order
-            if (!Transaction::where('order_id', $order->id)->exists()) {
-                $transaction = Transaction::create([
-                    'user_id'  => auth()->id(),
-                    'order_id' => $order->id,
-                    'total'    => $order->total,
-                    'paid'     => $order->total,
-                    'change'   => 0,
-                    'metode'   => $order->payment_method ?? 'Cash',
-                ]);
-
-                foreach ($order->items as $item) {
-                    TransactionItem::create([
-                        'transaction_id' => $transaction->id,
-                        'product_id'     => $item->product_id,
-                        'qty'            => $item->qty,
-                        'price'          => $item->price,
-                    ]);
-
-                    // Decrement stock for online orders
-                    $product = Product::find($item->product_id);
-                    if ($product) {
-                        $product->decrement('stock', $item->qty);
-                    }
-                }
-            }
-        }
 
         return back()->with('success', 'Status pesanan diperbarui!');
     }
@@ -71,39 +43,51 @@ class TransactionController extends Controller
     {
         $items = $request->items;
         if (!$items || count($items) === 0) {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, 'message' => 'Keranjang kosong']);
         }
 
-        $total = 0;
-        foreach ($items as $item) {
-            $total += $item['price'] * $item['qty'];
+        try {
+            $transaction_id = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $items) {
+                // Validate all stock first and calculate actual DB total
+                $total = 0;
+                foreach ($items as $item) {
+                    $product = Product::find($item['id']);
+                    if (!$product || $product->stock < $item['qty']) {
+                        throw new \Exception('Stok ' . ($product->name ?? 'produk') . ' tidak mencukupi!');
+                    }
+                    $total += $product->price * $item['qty'];
+                }
+
+                $transaction = Transaction::create([
+                    'user_id' => auth()->id(),
+                    'order_id' => $request->order_id ?? null,
+                    'total' => $total,
+                    'paid' => $request->paid,
+                    'change' => $request->paid - $total,
+                    'metode' => $request->metode ?? 'Cash',
+                ]);
+
+                foreach ($items as $item) {
+                    $product = Product::find($item['id']);
+                    TransactionItem::create([
+                        'transaction_id' => $transaction->id,
+                        'product_id' => $product->id,
+                        'qty' => $item['qty'],
+                        'price' => $product->price,
+                    ]);
+
+                    // Kurangi stok
+                    $product->decrementStock($item['qty']);
+                }
+
+                return $transaction->id;
+            });
+
+            return response()->json(['success' => true, 'transaction_id' => $transaction_id]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
-
-        $transaction = Transaction::create([
-            'user_id' => auth()->id(),
-            'order_id' => $request->order_id ?? null,
-            'total' => $total,
-            'paid' => $request->paid,
-            'change' => $request->paid - $total,
-            'metode' => $request->metode ?? 'Cash',
-        ]);
-
-        foreach ($items as $item) {
-            TransactionItem::create([
-                'transaction_id' => $transaction->id,
-                'product_id' => $item['id'],
-                'qty' => $item['qty'],
-                'price' => $item['price'],
-            ]);
-
-            // Kurangi stok
-            $product = Product::find($item['id']);
-            if ($product) {
-                $product->decrement('stock', $item['qty']);
-            }
-        }
-
-        return response()->json(['success' => true, 'transaction_id' => $transaction->id]);
     }
     public function history()
     {

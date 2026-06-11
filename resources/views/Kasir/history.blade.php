@@ -6,7 +6,7 @@
 
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold text-gray-800">📋 Riwayat Pesanan</h2>
-    <a href="{{ route('kasir.dashboard') }}" class="text-gray-400 hover:text-orange-500 text-sm">← Kembali</a>
+    <a href="{{ route('kasir.dashboard') }}" class="text-gray-400 hover:text-[#7A6247] text-sm">← Kembali</a>
 </div>
 
 {{-- Filter & Search --}}
@@ -14,11 +14,11 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
         <input type="text" id="search" placeholder="🔍 Cari nama kasir..."
             oninput="filterTable()"
-            class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300">
+            class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#7A6247]">
         <input type="date" id="filter-date" onchange="filterTable()"
-            class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300">
+            class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#7A6247]">
         <select id="filter-metode" onchange="filterTable()"
-            class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300">
+            class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#7A6247]">
             <option value="">Semua Metode</option>
             <option value="Cash">Cash</option>
             <option value="QRIS">QRIS</option>
@@ -35,7 +35,7 @@
     </div>
     <div class="bg-white rounded-2xl shadow p-4 text-center">
         <p class="text-gray-400 text-xs mb-1">Total Pendapatan</p>
-        <p class="font-bold text-lg text-orange-500">Rp {{ number_format($transactions->sum('total'), 0, ',', '.') }}</p>
+        <p class="font-bold text-lg text-[#7A6247]">Rp {{ number_format($transactions->sum('total'), 0, ',', '.') }}</p>
     </div>
     <div class="bg-white rounded-2xl shadow p-4 text-center">
         <p class="text-gray-400 text-xs mb-1">Transaksi Hari Ini</p>
@@ -50,31 +50,29 @@
 {{-- Tabel Transaksi --}}
 <div class="bg-white rounded-2xl shadow overflow-hidden">
     <table class="w-full" id="trx-table">
-        <thead class="bg-gray-50">
+        <thead class="bg-[#f5e6d3]">
             <tr>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">#</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Kasir</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Item</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Total</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Bayar</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Kembalian</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Metode</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Waktu</th>
-                <th class="px-4 py-3 text-left text-sm text-gray-600">Aksi</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">#</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Kasir</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Item</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Total</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Bayar</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Kembalian</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Metode</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Waktu</th>
+                <th class="px-4 py-3 text-left text-sm text-[#7A6247]">Aksi</th>
             </tr>
         </thead>
         <tbody class="divide-y" id="trx-body">
             @forelse($transactions as $trx)
-            <tr class="hover:bg-gray-50 trx-row"
+            <tr class="hover:bg-[#fdf5ec] trx-row"
                 data-kasir="{{ strtolower($trx->user->name) }}"
                 data-date="{{ $trx->created_at->format('Y-m-d') }}"
                 data-metode="{{ $trx->metode ?? 'Cash' }}">
                 <td class="px-4 py-3 text-sm text-gray-400">#{{ $trx->id }}</td>
                 <td class="px-4 py-3 text-sm font-semibold text-gray-800">{{ $trx->user->name }}</td>
-                <td class="px-4 py-3 text-sm text-gray-600">
-                    {{ $trx->items->sum('qty') }} item
-                </td>
-                <td class="px-4 py-3 text-sm font-bold text-orange-500">
+                <td class="px-4 py-3 text-sm text-gray-600">{{ $trx->items->sum('qty') }} item</td>
+                <td class="px-4 py-3 text-sm font-bold text-[#7A6247]">
                     Rp {{ number_format($trx->total, 0, ',', '.') }}
                 </td>
                 <td class="px-4 py-3 text-sm text-gray-600">
@@ -97,61 +95,124 @@
                 </td>
                 <td class="px-4 py-3">
                     <button onclick="lihatDetail({{ $trx->id }})"
-                        class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-lg hover:bg-orange-50 hover:text-orange-500 mr-1">
+                        class="text-xs bg-[#f5e6d3] text-[#7A6247] px-3 py-1 rounded-lg hover:bg-[#e8d5c1] mr-1">
                         👁️ Detail
                     </button>
                     <button onclick="cetakStruk({{ $trx->id }})"
-                        class="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-lg hover:bg-orange-200">
+                        class="text-xs bg-[#7A6247] text-white px-3 py-1 rounded-lg hover:bg-[#5E4A33]">
                         🖨️ Cetak
                     </button>
                 </td>
             </tr>
             @empty
             <tr>
-                <td colspan="9" class="text-center py-10 text-gray-400">
-                    <p class="text-4xl mb-3">📋</p>
-                    <p>Belum ada riwayat transaksi</p>
+                <td colspan="9" class="px-4 py-10 text-center text-gray-400">
+                    <p class="text-4xl mb-2">📋</p>
+                    <p>Belum ada transaksi</p>
                 </td>
             </tr>
             @endforelse
         </tbody>
     </table>
+    <div class="px-4 py-3 border-t">
+        {{ $transactions->links() }}
+    </div>
 </div>
 
-{{-- Pagination --}}
-<div class="mt-6">
-    {{ $transactions->links() }}
+{{-- Modal Detail --}}
+<div id="detail-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-2xl w-full max-w-md mx-4 shadow-xl overflow-hidden">
+        <div class="bg-[#7A6247] px-6 py-4 flex justify-between items-center">
+            <h3 class="text-white font-bold text-lg">🧾 Detail Transaksi</h3>
+            <button onclick="closeDetail()" class="text-white hover:text-[#dbc7a9] text-xl">✕</button>
+        </div>
+        <div class="p-6" id="detail-content">
+            <p class="text-center text-gray-400">Memuat...</p>
+        </div>
+    </div>
 </div>
 
-{{-- JavaScript --}}
 <script>
+const transactions = @json($transactions->items());
+
 function filterTable() {
-    const search = document.getElementById('search').value.toLowerCase();
+    const q = document.getElementById('search').value.toLowerCase();
     const date = document.getElementById('filter-date').value;
     const metode = document.getElementById('filter-metode').value;
-    const rows = document.querySelectorAll('.trx-row');
 
-    rows.forEach(row => {
-        const kasir = row.dataset.kasir || '';
-        const rowDate = row.dataset.date || '';
-        const rowMetode = row.dataset.metode || '';
-
-        let show = true;
-        if (search && !kasir.includes(search)) show = false;
-        if (date && rowDate !== date) show = false;
-        if (metode && rowMetode !== metode) show = false;
-
-        row.style.display = show ? '' : 'none';
+    document.querySelectorAll('.trx-row').forEach(row => {
+        const matchKasir = row.dataset.kasir.includes(q);
+        const matchDate = !date || row.dataset.date === date;
+        const matchMetode = !metode || row.dataset.metode === metode;
+        row.style.display = matchKasir && matchDate && matchMetode ? '' : 'none';
     });
 }
 
 function lihatDetail(id) {
-    alert('Detail transaksi #' + id + ' — fitur segera hadir!');
+    const trx = transactions.find(t => t.id === id);
+    if (!trx) return;
+
+    document.getElementById('detail-content').innerHTML = `
+        <div class="space-y-3">
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">ID Transaksi</span>
+                <span class="font-semibold">#${trx.id}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Waktu</span>
+                <span class="font-semibold">${new Date(trx.created_at).toLocaleString('id-ID')}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Metode</span>
+                <span class="font-semibold">${trx.metode ?? 'Cash'}</span>
+            </div>
+            <hr>
+            <div class="space-y-2">
+                ${trx.items.map(item => `
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-700">${item.product?.name ?? 'Produk'} × ${item.qty}</span>
+                        <span class="font-semibold">Rp ${fmt(item.price * item.qty)}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <hr>
+            <div class="flex justify-between font-bold text-[#7A6247]">
+                <span>Total</span>
+                <span>Rp ${fmt(trx.total)}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Bayar</span>
+                <span>Rp ${fmt(trx.paid)}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Kembalian</span>
+                <span class="text-green-600 font-semibold">Rp ${fmt(trx.change)}</span>
+            </div>
+        </div>
+        <button onclick="cetakStruk(${trx.id})"
+            class="w-full mt-4 bg-[#7A6247] text-white py-2 rounded-xl hover:bg-[#5E4A33]">
+            🖨️ Cetak Struk
+        </button>
+    `;
+
+    document.getElementById('detail-modal').classList.remove('hidden');
+}
+
+function closeDetail() {
+    document.getElementById('detail-modal').classList.add('hidden');
 }
 
 function cetakStruk(id) {
-    alert('Cetak struk transaksi #' + id + ' — fitur segera hadir!');
+    alert('Fitur cetak struk #' + id + ' coming soon!');
 }
+
+function fmt(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+document.addEventListener('click', function(e) {
+    if (e.target === document.getElementById('detail-modal')) closeDetail();
+});
 </script>
 
 @endsection

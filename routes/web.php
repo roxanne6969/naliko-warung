@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\TransactionController;
 use App\Http\Controllers\Customer\MenuController;
 use App\Http\Controllers\Customer\OrderController;
@@ -26,9 +28,7 @@ require __DIR__.'/auth.php';
 
 // Admin routes
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
@@ -39,9 +39,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
 // Kasir routes
 Route::prefix('kasir')->middleware(['auth', 'kasir'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('kasir.dashboard');
-    })->name('kasir.dashboard');
+    Route::get('/dashboard', [KasirDashboardController::class, 'index'])->name('kasir.dashboard');
 
     Route::get('/orders', [TransactionController::class, 'orders'])->name('kasir.orders');
     Route::post('/orders/{order}/confirm', [TransactionController::class, 'confirm'])->name('kasir.orders.confirm');

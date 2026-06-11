@@ -13,7 +13,10 @@ class PaymentController extends Controller
      */
     public function show(Order $order)
     {
-        // Pastikan order milik session ini atau boleh diakses
+        if (session('customer_order_id') !== $order->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $order->load('items.product');
         return view('customer.payment', compact('order'));
     }
@@ -23,6 +26,9 @@ class PaymentController extends Controller
      */
     public function upload(Request $request, Order $order)
     {
+        if (session('customer_order_id') !== $order->id) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'payment_proof' => 'required_unless:payment_method,Cash|image|mimes:jpg,jpeg,png|max:2048',
             'payment_method' => 'required|in:QRIS,Transfer,Cash',

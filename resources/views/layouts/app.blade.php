@@ -11,70 +11,71 @@
 </head>
 <body class="bg-[#E8D5C1] min-h-screen">
 
-    {{-- Navbar --}}
-    <nav class="bg-[#7A6247] shadow-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-3">
+   {{-- Navbar --}}
+<nav class="bg-[#7A6247] shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3">
 
-            {{-- Baris 1: Logo + Menu Links --}}
-            <div class="flex justify-between items-center mb-2">
-                <a href="{{ route('menu.index') }}" class="text-xl font-bold text-[#F7E6CC]">
-                    🍽️ Naliko Warung
-                </a>
-                <div class="flex gap-4 items-center">
-                    {{-- Menu & Alamat & Kontak tampil untuk semua --}}
+        {{-- Baris 1: Logo + Menu Links --}}
+        <div class="flex justify-between items-center mb-2">
+            <a href="{{ route('menu.index') }}" class="text-xl font-bold text-[#F7E6CC]">
+                🍽️ Naliko Warung
+            </a>
+            <div class="flex gap-4 items-center">
+
+                {{-- Menu, Alamat, Kontak hanya untuk pelanggan --}}
+                @guest
                     <a href="{{ route('menu.index') }}" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">Menu</a>
                     <a href="#alamat" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">📍 Alamat</a>
                     <a href="#kontak" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">📞 Kontak</a>
+                    <a href="{{ route('cart') }}" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">🛒 Keranjang</a>
+                @endguest
 
-                    {{-- Keranjang hanya untuk pelanggan --}}
-                    @guest
-                        <a href="{{ route('cart') }}" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">🛒 Keranjang</a>
-                    @endguest
-
-                    @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}"
-                                class="bg-[#5E4A33] text-white px-3 py-1 rounded-lg text-sm hover:bg-[#6e583f]">
-                                👑 Admin
-                            </a>
-                        @elseif(auth()->user()->isKasir())
-                            <a href="{{ route('kasir.dashboard') }}"
-                                class="bg-[#5E4A33] text-white px-3 py-1 rounded-lg text-sm hover:bg-[#6e583f]">
-                                💰 Kasir
-                            </a>
-                        @endif
-                        <form action="{{ route('logout') }}" method="POST" id="logout-form">
-                            @csrf
-                            <button type="button" onclick="confirmLogout()"
-                                class="text-[#F7E6CC] hover:text-red-300 text-sm">
-                                Logout
-                            </button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}"
+                {{-- Menu untuk admin --}}
+                @auth
+                    @if(auth()->user()->isAdmin())
+                        <a href="{{ route('menu.index') }}" class="text-[#F7E6CC] hover:text-[#dbc7a9] text-sm">Menu</a>
+                        <a href="{{ route('admin.dashboard') }}"
                             class="bg-[#5E4A33] text-white px-3 py-1 rounded-lg text-sm hover:bg-[#6e583f]">
-                            Login
+                            👑 Admin
                         </a>
-                    @endauth
-                </div>
+                    @elseif(auth()->user()->isKasir())
+                        <a href="{{ route('kasir.dashboard') }}"
+                            class="bg-[#5E4A33] text-white px-3 py-1 rounded-lg text-sm hover:bg-[#6e583f]">
+                            💰 Kasir
+                        </a>
+                    @endif
+                    <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                        @csrf
+                        <button type="button" onclick="confirmLogout()"
+                            class="text-[#F7E6CC] hover:text-red-300 text-sm">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="bg-[#5E4A33] text-white px-3 py-1 rounded-lg text-sm hover:bg-[#6e583f]">
+                        Login
+                    </a>
+                @endauth
+
             </div>
-
-            {{-- Baris 2: Search Bar (hanya untuk pelanggan) --}}
-            @guest
-            <div class="relative">
-                <input type="text" id="navbar-search"
-                    placeholder="🔍 Cari menu makanan atau minuman..."
-                    onkeyup="navbarSearch()"
-                    class="w-full border border-[#9e8065] rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5E4A33] bg-[#f5e6d3] text-[#5E4A33] placeholder-[#9e8065]">
-
-                <div id="search-results"
-                    class="absolute top-full left-0 right-0 bg-white rounded-xl shadow-lg mt-1 hidden z-50 max-h-72 overflow-y-auto">
-                </div>
-            </div>
-            @endguest
-
         </div>
-    </nav>
+
+        {{-- Baris 2: Search Bar (hanya untuk pelanggan) --}}
+        @guest
+        <div class="relative">
+            <input type="text" id="navbar-search"
+                placeholder="🔍 Cari menu makanan atau minuman..."
+                onkeyup="navbarSearch()"
+                class="w-full border border-[#9e8065] rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#5E4A33] bg-[#f5e6d3] text-[#5E4A33] placeholder-[#9e8065]">
+            <div id="search-results"
+                class="absolute top-full left-0 right-0 bg-white rounded-xl shadow-lg mt-1 hidden z-50 max-h-72 overflow-y-auto">
+            </div>
+        </div>
+        @endguest
+
+    </div>
+</nav>
 
     {{-- Content --}}
     <main class="max-w-6xl mx-auto px-4 py-6">
