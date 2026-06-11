@@ -9,7 +9,7 @@
         html { scroll-behavior: smooth; }
     </style>
 </head>
-<body class="bg-[#F0E0CC] min-h-screen">
+<body class="bg-[#F0E0CC] min-h-screen flex flex-col">
 
     {{-- Navbar --}}
     <nav class="bg-[#5C4A35] shadow-md sticky top-0 z-50">
@@ -84,7 +84,7 @@
     </nav>
 
     {{-- Content --}}
-    <main class="max-w-6xl mx-auto px-4 py-6">
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
         @yield('content')
     </main>
 
