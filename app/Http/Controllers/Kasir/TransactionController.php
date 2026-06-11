@@ -95,8 +95,15 @@ class TransactionController extends Controller
                 'price' => $item['price'],
             ]);
 
-            // Kurangi stok
-            Product::find($item['id'])->decrement('stock', $item['qty']);
+                    // Kurangi stok
+        $product = Product::find($item['id']);
+        if (!$product || $product->stock < $item['qty']) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Stok ' . ($product->name ?? 'produk') . ' tidak mencukupi!'
+            ]);
+}
+$product->decrementStock($item['qty']);
         }
 
         return response()->json(['success' => true, 'transaction_id' => $transaction->id]);

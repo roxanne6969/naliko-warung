@@ -161,11 +161,14 @@ let metode = 'Cash';
 let lastTransactionId = null;
 
 function addToCart(id, name, price, stock) {
-    if (stock <= 0) return;
+    if (stock <= 0) {
+        alert('Maaf, stok ' + name + ' sudah habis!');
+        return;
+    }
     const existing = cart.find(i => i.id === id);
     if (existing) {
         if (existing.qty >= stock) {
-            alert('Stok tidak mencukupi!');
+            alert('Stok ' + name + ' hanya tersisa ' + stock + '!');
             return;
         }
         existing.qty++;
@@ -284,6 +287,13 @@ function submitTransaction() {
 
     if (metode === 'Cash' && paid < total) return alert('Uang bayar kurang!');
 
+    // Validasi stok sebelum submit
+    const outOfStock = cart.filter(i => i.qty > i.stock);
+    if (outOfStock.length > 0) {
+        alert('Stok tidak mencukupi untuk: ' + outOfStock.map(i => i.name).join(', '));
+        return;
+    }
+
     fetch('{{ route("kasir.transaction.store") }}', {
         method: 'POST',
         headers: {
@@ -303,7 +313,7 @@ function submitTransaction() {
             renderCart();
             document.getElementById('paid-input').value = '';
         } else {
-            alert('Transaksi gagal, coba lagi!');
+            alert('❌ ' + res.message);
         }
     })
     .catch(() => alert('Terjadi kesalahan!'));

@@ -28,4 +28,13 @@ class Product extends Model
     {
         return $this->hasMany(TransactionItem::class);
     }
+    public function decrementStock($qty)
+    {
+        $this->decrement('stock', $qty);
+        
+        // Otomatis set is_available = false kalau stok habis
+        if ($this->stock <= 0) {
+            $this->update(['is_available' => false, 'stock' => 0]);
+        }
+    }
 }
