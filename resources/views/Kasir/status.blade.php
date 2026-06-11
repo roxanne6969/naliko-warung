@@ -1,87 +1,110 @@
 @extends('layouts.app')
 
-@section('title', 'Status Pesanan - Naliko Warung')
+@section('title', 'Status Pesanan - Kasir')
 
 @section('content')
 
 <div class="max-w-lg mx-auto">
-    <div class="bg-white rounded-2xl shadow p-6">
+    <div class="bg-white rounded-2xl shadow-sm border border-[#e8d5c1] overflow-hidden">
 
-        {{-- Status Icon --}}
-        <div class="text-center mb-6">
+        {{-- Status Header --}}
+        <div class="bg-[#5C4A35] px-6 py-5 text-center">
             @if($order->payment_status === 'waiting_verification')
-                <div class="text-5xl mb-3">🕐</div>
-                <h2 class="text-xl font-bold text-blue-500">Menunggu Verifikasi Pembayaran</h2>
-                <p class="text-gray-400 text-sm mt-1">Kasir sedang memeriksa bukti pembayaranmu</p>
+                <div class="w-16 h-16 bg-blue-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    @svg('heroicon-o-clock', 'w-8 h-8 text-[#F7E6CC]')
+                </div>
+                <h2 class="text-xl font-bold text-[#F7E6CC]">Menunggu Verifikasi Pembayaran</h2>
+                <p class="text-[#dbc7a9] text-sm mt-1">Kasir sedang memeriksa bukti pembayaranmu</p>
             @elseif($order->payment_status === 'rejected')
-                <div class="text-5xl mb-3">❌</div>
-                <h2 class="text-xl font-bold text-red-500">Pembayaran Ditolak</h2>
-                <p class="text-gray-400 text-sm mt-1">{{ $order->payment_note ?? 'Silakan upload ulang bukti pembayaran' }}</p>
+                <div class="w-16 h-16 bg-red-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    @svg('heroicon-o-x-circle', 'w-8 h-8 text-red-300')
+                </div>
+                <h2 class="text-xl font-bold text-red-300">Pembayaran Ditolak</h2>
+                <p class="text-[#dbc7a9] text-sm mt-1">{{ $order->payment_note ?? 'Silakan upload ulang bukti pembayaran' }}</p>
             @elseif($order->payment_status === 'paid' || $order->status === 'done')
-                <div class="text-5xl mb-3">🎉</div>
-                <h2 class="text-xl font-bold text-green-500">Pesanan Selesai!</h2>
-                <p class="text-gray-400 text-sm mt-1">Terima kasih sudah memesan di Naliko Warung</p>
+                <div class="w-16 h-16 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    @svg('heroicon-o-check-circle', 'w-8 h-8 text-green-300')
+                </div>
+                <h2 class="text-xl font-bold text-green-300">Pesanan Selesai!</h2>
+                <p class="text-[#dbc7a9] text-sm mt-1">Terima kasih sudah memesan di Naliko Warung</p>
             @elseif($order->status === 'ready')
-                <div class="text-5xl mb-3">✅</div>
-                <h2 class="text-xl font-bold text-green-500">Pesanan Siap!</h2>
-                <p class="text-gray-400 text-sm mt-1">Silakan lakukan pembayaran</p>
+                <div class="w-16 h-16 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    @svg('heroicon-o-check-badge', 'w-8 h-8 text-green-300')
+                </div>
+                <h2 class="text-xl font-bold text-green-300">Pesanan Siap!</h2>
+                <p class="text-[#dbc7a9] text-sm mt-1">Silakan lakukan pembayaran</p>
             @elseif($order->status === 'confirmed')
-                <div class="text-5xl mb-3">👨‍🍳</div>
-                <h2 class="text-xl font-bold text-blue-500">Sedang Diproses</h2>
-                <p class="text-gray-400 text-sm mt-1">Pesananmu sedang disiapkan</p>
+                <div class="w-16 h-16 bg-blue-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    @svg('heroicon-o-fire', 'w-8 h-8 text-blue-300')
+                </div>
+                <h2 class="text-xl font-bold text-blue-300">Sedang Diproses</h2>
+                <p class="text-[#dbc7a9] text-sm mt-1">Pesananmu sedang disiapkan</p>
             @else
-                <div class="text-5xl mb-3">⏳</div>
-                <h2 class="text-xl font-bold text-yellow-500">Menunggu Konfirmasi</h2>
-                <p class="text-gray-400 text-sm mt-1">Kasir akan segera memproses pesananmu</p>
+                <div class="w-16 h-16 bg-yellow-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    @svg('heroicon-o-clock', 'w-8 h-8 text-yellow-300')
+                </div>
+                <h2 class="text-xl font-bold text-yellow-300">Menunggu Konfirmasi</h2>
+                <p class="text-[#dbc7a9] text-sm mt-1">Kasir akan segera memproses pesananmu</p>
             @endif
-            <p class="text-gray-300 text-xs mt-2">Order #{{ $order->id }}</p>
+            <p class="text-[#9e8065] text-xs mt-2">Order #{{ $order->id }}</p>
         </div>
 
-        {{-- Info Pesanan --}}
-        <div class="bg-gray-50 rounded-xl p-4 mb-4">
-            <p class="text-sm text-gray-600">👤 <strong>{{ $order->customer_name }}</strong></p>
-            @if($order->table_number)
-                <p class="text-sm text-gray-600 mt-1">🪑 {{ $order->table_number }}</p>
-            @endif
-            @if($order->note)
-                <p class="text-sm text-gray-600 mt-1">📝 {{ $order->note }}</p>
-            @endif
-        </div>
-
-        {{-- Item Pesanan --}}
-        <div class="space-y-2 mb-4">
-            @foreach($order->items as $item)
-            <div class="flex justify-between text-sm">
-                <span class="text-gray-700">{{ $item->product->name }} × {{ $item->qty }}</span>
-                <span class="font-semibold">Rp {{ number_format($item->price * $item->qty, 0, ',', '.') }}</span>
+        <div class="p-6">
+            {{-- Info Pesanan --}}
+            <div class="bg-[#fdfaf7] rounded-xl border border-[#f0e0cc] p-4 mb-4 space-y-2">
+                <div class="flex items-center gap-2 text-sm">
+                    @svg('heroicon-o-user', 'w-4 h-4 text-[#9e8065]')
+                    <span class="font-semibold text-[#3E2F1E]">{{ $order->customer_name }}</span>
+                </div>
+                @if($order->table_number)
+                    <div class="flex items-center gap-2 text-sm">
+                        @svg('heroicon-o-table-cells', 'w-4 h-4 text-[#9e8065]')
+                        <span class="text-[#5C4A35]">{{ $order->table_number }}</span>
+                    </div>
+                @endif
+                @if($order->note)
+                    <div class="flex items-center gap-2 text-sm">
+                        @svg('heroicon-o-document-text', 'w-4 h-4 text-[#9e8065]')
+                        <span class="text-[#5C4A35]">{{ $order->note }}</span>
+                    </div>
+                @endif
             </div>
-            @endforeach
+
+            {{-- Item Pesanan --}}
+            <div class="space-y-2 mb-4">
+                @foreach($order->items as $item)
+                <div class="flex justify-between text-sm py-1.5 border-b border-[#f0e0cc] last:border-0">
+                    <span class="text-[#3E2F1E]">{{ $item->product->name }} × {{ $item->qty }}</span>
+                    <span class="font-semibold text-[#5C4A35]">Rp {{ number_format($item->price * $item->qty, 0, ',', '.') }}</span>
+                </div>
+                @endforeach
+            </div>
+
+            <div class="flex justify-between font-bold text-[#5C4A35] bg-[#fdfaf7] rounded-xl border border-[#f0e0cc] px-4 py-3 mb-5">
+                <span>Total</span>
+                <span>Rp {{ number_format($order->total, 0, ',', '.') }}</span>
+            </div>
+
+            {{-- Tombol Bayar - muncul hanya saat ready atau ditolak --}}
+            @if($order->status === 'ready' && in_array($order->payment_status, ['unpaid', 'rejected']))
+                <a href="{{ route('order.payment', $order) }}"
+                    class="flex items-center justify-center gap-2 w-full bg-[#5C4A35] text-[#F7E6CC] py-3 rounded-xl font-bold hover:bg-[#3E2F1E] transition mb-3">
+                    @svg('heroicon-o-credit-card', 'w-4 h-4') Bayar Sekarang
+                </a>
+            @endif
+
+            @if(!in_array($order->status, ['done']) || $order->payment_status !== 'paid')
+                <a href="{{ route('menu.index') }}"
+                    class="flex items-center justify-center gap-2 w-full text-center border border-[#e8d5c1] text-[#9e8065] py-3 rounded-xl text-sm hover:bg-[#fdf5ec] hover:text-[#5C4A35] transition">
+                    @svg('heroicon-o-shopping-bag', 'w-4 h-4') Pesan Lagi
+                </a>
+            @else
+                <a href="{{ route('menu.index') }}"
+                    class="flex items-center justify-center gap-2 w-full bg-[#5C4A35] text-[#F7E6CC] py-3 rounded-xl hover:bg-[#3E2F1E] transition font-semibold">
+                    @svg('heroicon-o-shopping-bag', 'w-4 h-4') Pesan Lagi
+                </a>
+            @endif
         </div>
-
-        <div class="border-t pt-3 flex justify-between font-bold text-orange-500 mb-5">
-            <span>Total</span>
-            <span>Rp {{ number_format($order->total, 0, ',', '.') }}</span>
-        </div>
-
-        {{-- Tombol Bayar - muncul hanya saat ready atau ditolak --}}
-        @if($order->status === 'ready' && in_array($order->payment_status, ['unpaid', 'rejected']))
-            <a href="{{ route('order.payment', $order) }}"
-                class="block text-center bg-orange-500 text-white py-3 rounded-xl font-bold hover:bg-orange-600 transition mb-3">
-                💳 Bayar Sekarang
-            </a>
-        @endif
-
-        @if(!in_array($order->status, ['done']) || $order->payment_status !== 'paid')
-            <a href="{{ route('menu.index') }}"
-                class="block text-center mt-2 text-gray-400 text-sm hover:text-orange-500">
-                🍽️ Pesan Lagi
-            </a>
-        @else
-            <a href="{{ route('menu.index') }}"
-                class="block text-center bg-orange-500 text-white py-3 rounded-xl hover:bg-orange-600 transition">
-                🍽️ Pesan Lagi
-            </a>
-        @endif
 
     </div>
 </div>

@@ -48,7 +48,7 @@ class TransactionController extends Controller
 
         try {
             $transaction_id = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $items) {
-                // Validate all stock first and calculate actual DB total
+                // Validasi stok dan hitung total
                 $total = 0;
                 foreach ($items as $item) {
                     $product = Product::find($item['id']);
@@ -95,5 +95,27 @@ class TransactionController extends Controller
             ->latest()
             ->paginate(10);
         return view('kasir.history', compact('transactions'));
+    }
+
+    public function stok(Request $request)
+    {
+        $query = Product::with('category')->latest();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category_id', $request->category);
+        }
+
+        $products = $query->get();
+        $categories = \App\Models\Category::all();
+
+        return view('kasir.stok', compact('products', 'categories'));
     }
 }

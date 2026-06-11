@@ -1,104 +1,118 @@
-<x-guest-layout>
-<div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-stone-800 to-stone-900">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Naliko Warung</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-[#3E2F1E] min-h-screen flex items-center justify-center p-4">
+
     <div class="w-full max-w-md">
-        <!-- Card -->
-        <div class="bg-[#E8D5C1] rounded-3xl shadow-2xl p-8 space-y-8">
-            <!-- Logo Placeholder -->
-            <div class="flex justify-center">
-                <div class="flex items-center justify-center w-24 h-24 bg-gray-300 rounded-full">
-                    <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
+
+        {{-- Card --}}
+        <div class="bg-[#F0E0CC] rounded-3xl shadow-2xl overflow-hidden">
+
+            {{-- Header Band --}}
+            <div class="bg-[#5C4A35] px-8 py-7 text-center">
+                <div class="w-16 h-16 bg-[#F7E6CC] bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    @svg('heroicon-o-building-storefront', 'w-8 h-8 text-[#F7E6CC]')
                 </div>
+                <h1 class="text-2xl font-bold text-[#F7E6CC]">Naliko Warung</h1>
+                <p class="text-[#dbc7a9] text-sm mt-1">Selamat datang! Silakan masuk untuk melanjutkan.</p>
             </div>
 
-            <!-- Title -->
-            <div class="text-center">
-                <h1 class="text-4xl font-bold text-stone-900">NALIKO</h1>
-                <p class="text-sm text-stone-700 mt-1">Member Login</p>
-            </div>
+            <div class="px-8 py-7">
 
-            <!-- Session Status -->
-            <x-auth-session-status class="mb-4" :status="session('status')" />
+                {{-- Session Status --}}
+                @if (session('status'))
+                    <div class="bg-green-50 border border-green-200 rounded-xl px-4 py-3 mb-5 flex items-center gap-2">
+                        @svg('heroicon-o-check-circle', 'w-4 h-4 text-green-600')
+                        <p class="text-sm text-green-700 font-semibold">{{ session('status') }}</p>
+                    </div>
+                @endif
 
-            <!-- Form -->
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                @csrf
+                {{-- Form --}}
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                    @csrf
 
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-stone-800 mb-2">
-                        Email
+                    {{-- Email --}}
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-[#3E2F1E] mb-1.5 flex items-center gap-1">
+                            @svg('heroicon-o-envelope', 'w-4 h-4 text-[#9e8065]') Alamat Email
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            placeholder="nama@email.com"
+                            class="w-full px-4 py-3 bg-white border border-[#e8d5c1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5C4A35] text-[#3E2F1E] placeholder-[#c4a882] transition"
+                            required
+                            autofocus
+                            autocomplete="username"
+                        />
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Password --}}
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-[#3E2F1E] mb-1.5 flex items-center gap-1">
+                            @svg('heroicon-o-lock-closed', 'w-4 h-4 text-[#9e8065]') Password
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="••••••••"
+                            class="w-full px-4 py-3 bg-white border border-[#e8d5c1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5C4A35] text-[#3E2F1E] transition"
+                            required
+                            autocomplete="current-password"
+                        />
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Remember Me --}}
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            id="remember_me"
+                            name="remember"
+                            class="w-4 h-4 rounded border-[#e8d5c1] text-[#5C4A35] focus:ring-[#5C4A35]"
+                        />
+                        <span class="text-sm text-[#9e8065]">Ingat saya</span>
                     </label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        placeholder="test@example.com"
-                        class="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-600 transition"
-                        required
-                        autofocus
-                        autocomplete="username"
-                    />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+
+                    {{-- Forgot Password + Login Button --}}
+                    <div class="flex items-center justify-between pt-1">
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}"
+                                class="text-sm text-[#9e8065] hover:text-[#5C4A35] hover:underline transition">
+                                Lupa password?
+                            </a>
+                        @endif
+
+                        <button
+                            type="submit"
+                            class="flex items-center gap-2 bg-[#5C4A35] hover:bg-[#3E2F1E] text-[#F7E6CC] font-semibold py-3 px-7 rounded-xl transition">
+                            @svg('heroicon-o-arrow-right-on-rectangle', 'w-4 h-4') Masuk
+                        </button>
+                    </div>
+                </form>
+
+                {{-- Footer --}}
+                <div class="text-center mt-6 pt-6 border-t border-[#e8d5c1]">
+                    <p class="text-xs text-[#9e8065]">
+                        &copy; {{ date('Y') }} Naliko Warung. All rights reserved.
+                    </p>
                 </div>
-
-                <!-- Password -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-stone-800 mb-2">
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="••••••••"
-                        class="w-full px-4 py-3 bg-white border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-600 transition"
-                        required
-                        autocomplete="current-password"
-                    />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <!-- Remember Me -->
-                <label class="flex items-center space-x-2 cursor-pointer">
-                    <input
-                        type="checkbox"
-                        id="remember_me"
-                        name="remember"
-                        class="w-4 h-4 rounded border-stone-300 text-stone-600 shadow-sm focus:ring-stone-500"
-                    />
-                    <span class="text-sm text-stone-700">{{ __('Remember me') }}</span>
-                </label>
-
-                <!-- Forgot Password + Login Button -->
-                <div class="flex items-center justify-between">
-                    @if (Route::has('password.request'))
-                        <a
-                            href="{{ route('password.request') }}"
-                            class="text-sm text-stone-600 underline hover:text-stone-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stone-500"
-                        >
-                            {{ __('Forgot your password?') }}
-                        </a>
-                    @endif
-
-                    <button
-                        type="submit"
-                        class="bg-stone-700 hover:bg-stone-800 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
-                    >
-                        {{ __('Log in') }}
-                    </button>
-                </div>
-            </form>
-
-            <!-- Footer -->
-            <div class="text-center">
-                <p class="text-xs text-stone-600">
-                    © 2026 Naliko Warung. All rights reserved.
-                </p>
             </div>
         </div>
     </div>
-</div>
-</x-guest-layout>
+
+</body>
+</html>

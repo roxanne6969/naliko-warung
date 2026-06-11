@@ -47,7 +47,6 @@ Route::prefix('kasir')->middleware(['auth', 'kasir'])->group(function () {
     Route::post('/transaction', [TransactionController::class, 'store'])->name('kasir.transaction.store');
     Route::get('/history', [TransactionController::class, 'history'])->name('kasir.history');
     Route::get('/stok', [TransactionController::class, 'stok'])->name('kasir.stok');
-    Route::post('/stok/{product}', [TransactionController::class, 'updateStok'])->name('kasir.stok.update');
     Route::get('/payment', [PaymentVerifController::class, 'index'])->name('kasir.payment.index');
     Route::post('/payment/{order}/verify', [PaymentVerifController::class, 'verify'])->name('kasir.payment.verify');
 });

@@ -26,7 +26,7 @@ class OrderController extends Controller
             $order_id = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $items) {
                 $total = 0;
                 
-                // Validate all stock first
+                // Validasi stok untuk setiap item
                 foreach ($items as $item) {
                     $product = Product::find($item['id']);
                     if (!$product || $product->stock < $item['qty']) {
@@ -57,7 +57,7 @@ class OrderController extends Controller
                 return $order->id;
             });
 
-            // Set session so customer can access their payment page
+            // session untuk customer
             session(['customer_order_id' => $order_id]);
 
             return response()->json(['success' => true, 'order_id' => $order_id]);
