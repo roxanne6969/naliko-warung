@@ -1,58 +1,62 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ☕ Naliko Warung - Sistem Informasi Manajemen Pemesanan & Kasir
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem informasi manajemen pemesanan, kasir (POS), dan verifikasi pembayaran berbasis web yang dirancang khusus untuk cafe Naliko Warung. Aplikasi ini dibuat untuk mendigitalisasi alur pemesanan produk, mempermudah pelacakan status pesanan secara real-time oleh pelanggan, serta membantu kasir dalam mengelola antrean dapur dan verifikasi transaksi keuangan.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Fitur Utama Sistem
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🛒 1. Sisi Pelanggan (Customer Flow)
+- Katalog Menu Digital: Mengakses daftar makanan dan minuman lengkap dengan kategori, harga terbaru, dan status ketersediaan stok secara real-time.
+- Keranjang & Pesan Instan: Mengatur jumlah pesanan, memasukkan nomor meja, serta menambahkan catatan khusus untuk dapur langsung dari perangkat masing-masing.
+- Fleksibilitas Metode Pembayaran: Mendukung pilihan pembayaran instan menggunakan QRIS (dengan fitur unggah bukti transfer) atau Cash/Tunai langsung di meja kasir.
+- Pelacakan Status Real-Time: Menampilkan halaman indikator status pesanan interaktif (Menunggu Konfirmasi ⏳ -> Sedang Diproses 👨‍🍳 -> Pesanan Siap ✅ -> Selesai 🎉) dengan fitur penyegaran otomatis (auto-refresh).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 💳 2. Sisi Kasir (Kasir & POS Flow)
+- Point of Sale (POS) Offline: Melayani dan menginput pesanan pelanggan yang datang langsung secara manual di kasir.
+- Verifikasi Pembayaran Digital: Memeriksa kesesuaian nominal, metode transfer, dan foto bukti pembayaran yang diunggah oleh pelanggan online sebelum meneruskan pesanan ke dapur.
+- Manajemen Antrean Dapur: Memperbarui status pengerjaan makanan dan minuman dari ruang kasir agar sinkron dengan halaman pelacakan pelanggan.
+- Riwayat Penjualan: Mencatat seluruh transaksi finansial yang sukses ke dalam sistem log riwayat terpusat lengkap dengan sistem halaman (pagination).
 
-## Learning Laravel
+### 👨‍💻 3. Sisi Admin (Back-Office Management)
+- Manajemen Produk & Kategori: Mengelola menu kafe, mengubah harga, mengunggah foto produk, serta memantau manajemen stok barang.
+- Manajemen Pengguna: Mengatur hak akses dan pembuatan akun untuk staf kasir maupun sesama admin.
+- Laporan Finansial: Memantau akumulasi total pesanan harian, total pendapatan bersih, hingga statistik menu terlaris melalui dashboard summary.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Arsitektur & Teknologi
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Aplikasi ini dibangun menggunakan ekosistem modern PHP dan JavaScript dengan performa tinggi:
+- Framework Utama: Laravel 11 (PHP)
+- Interaktivitas Frontend: Livewire & Alpine.js (Reactive Component)
+- Desain & Antarmuka: Tailwind CSS (Modern Utility-first CSS)
+- Sistem Ikon Pro: Blade Heroicons (SVG Component Integration)
+- Database Management: MySQL
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## ⚙️ Panduan Instalasi & Menjalankan Proyek di Lokal
 
-```bash
-composer require laravel/boost --dev
+### 1. Kloning Repositori
+git clone https://github.com/roxanne6969/naliko-warung.git
+cd naliko-warung
 
-php artisan boost:install
-```
+### 2. Instalasi Dependensi Backend (Composer)
+composer install
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Instalasi & Kompilasi Dependensi Frontend (NPM)
+npm install
+npm run build
 
-## Contributing
+### 4. Konfigurasi Environment File
+Duplikat file .env.example menjadi .env lalu buat database baru bernama naliko_warung.
+cp .env.example .env
+php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 5. Migrasi Database & Seeding Data Awal
+php artisan migrate --seed
 
-## Code of Conduct
+### 6. Menjalankan Server Lokal Laravel
+php artisan serve
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
