@@ -62,7 +62,7 @@
 
 {{-- Menu Cards --}}
 <h3 class="text-sm font-semibold text-[#9e8065] uppercase tracking-wider mb-4">Menu Pengelolaan</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     <a href="{{ route('users.index') }}"
         class="bg-white rounded-2xl shadow-sm border border-[#e8d5c1] p-6 hover:shadow-md hover:border-[#c4a882] transition flex items-center gap-4 group">
         <div class="bg-[#f0e0cc] rounded-xl p-4">
@@ -70,18 +70,40 @@
         </div>
         <div class="flex-1">
             <h3 class="font-bold text-[#3E2F1E]">Kelola User</h3>
-            <p class="text-[#9e8065] text-sm">Tambah & hapus admin / kasir</p>
+            <p class="text-[#9e8065] text-sm hidden lg:block">Tambah admin / kasir</p>
         </div>
         @svg('heroicon-o-chevron-right', 'w-5 h-5 text-[#c4a882] group-hover:text-[#5C4A35] transition')
     </a>
     <a href="{{ route('admin.reports') }}"
         class="bg-white rounded-2xl shadow-sm border border-[#e8d5c1] p-6 hover:shadow-md hover:border-[#c4a882] transition flex items-center gap-4 group">
         <div class="bg-[#f0e0cc] rounded-xl p-4">
-            @svg('heroicon-o-chart-bar', 'w-7 h-7 text-[#5C4A35]')
+            @svg('heroicon-o-document-text', 'w-7 h-7 text-[#5C4A35]')
         </div>
         <div class="flex-1">
             <h3 class="font-bold text-[#3E2F1E]">Laporan Penjualan</h3>
-            <p class="text-[#9e8065] text-sm">Lihat rekap transaksi</p>
+            <p class="text-[#9e8065] text-sm hidden lg:block">Lihat rekap transaksi</p>
+        </div>
+        @svg('heroicon-o-chevron-right', 'w-5 h-5 text-[#c4a882] group-hover:text-[#5C4A35] transition')
+    </a>
+    <a href="{{ route('admin.analytics') }}"
+        class="bg-white rounded-2xl shadow-sm border border-[#e8d5c1] p-6 hover:shadow-md hover:border-[#c4a882] transition flex items-center gap-4 group">
+        <div class="bg-[#f0e0cc] rounded-xl p-4">
+            @svg('heroicon-o-chart-pie', 'w-7 h-7 text-[#5C4A35]')
+        </div>
+        <div class="flex-1">
+            <h3 class="font-bold text-[#3E2F1E]">Analytics</h3>
+            <p class="text-[#9e8065] text-sm hidden lg:block">Dashboard performa</p>
+        </div>
+        @svg('heroicon-o-chevron-right', 'w-5 h-5 text-[#c4a882] group-hover:text-[#5C4A35] transition')
+    </a>
+    <a href="{{ route('admin.settings') }}"
+        class="bg-white rounded-2xl shadow-sm border border-[#e8d5c1] p-6 hover:shadow-md hover:border-[#c4a882] transition flex items-center gap-4 group">
+        <div class="bg-[#f0e0cc] rounded-xl p-4">
+            @svg('heroicon-o-cog-8-tooth', 'w-7 h-7 text-[#5C4A35]')
+        </div>
+        <div class="flex-1">
+            <h3 class="font-bold text-[#3E2F1E]">Pengaturan</h3>
+            <p class="text-[#9e8065] text-sm hidden lg:block">Informasi warung</p>
         </div>
         @svg('heroicon-o-chevron-right', 'w-5 h-5 text-[#c4a882] group-hover:text-[#5C4A35] transition')
     </a>

@@ -19,7 +19,7 @@
             <div class="flex justify-between items-center mb-2">
                 <a href="{{ route('menu.index') }}" class="flex items-center gap-2 text-xl font-bold text-[#F7E6CC]">
                     @svg('heroicon-o-building-storefront', 'w-6 h-6')
-                    Naliko Warung
+                    {{ $global_setting->warung_name ?? 'Naliko Warung' }}
                 </a>
                 <div class="flex gap-4 items-center">
 
@@ -96,9 +96,9 @@
                 <div>
                     <h3 class="flex items-center gap-2 text-lg font-bold text-[#F7E6CC] mb-2">
                         @svg('heroicon-o-building-storefront', 'w-5 h-5')
-                        Naliko Warung
+                        {{ $global_setting->warung_name ?? 'Naliko Warung' }}
                     </h3>
-                    <p class="text-[#D7C2A0] text-sm">Menyajikan makanan & minuman lezat dengan harga terjangkau.</p>
+                    <p class="text-[#D7C2A0] text-sm">{{ $global_setting->warung_description ?? 'Menyajikan makanan & minuman lezat dengan harga terjangkau.' }}</p>
                 </div>
 
                 <div id="kontak">
@@ -107,12 +107,13 @@
                     </h4>
                     <ul class="space-y-2 text-sm text-[#D7C2A0]">
                         <li>
-                            <a href="tel:+6281234567890" class="flex items-center gap-2 hover:text-white">
-                                @svg('heroicon-o-phone', 'w-4 h-4') +62 812-3456-7890
+                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $global_setting->warung_phone ?? '+6281234567890') }}" class="flex items-center gap-2 hover:text-white">
+                                @svg('heroicon-o-phone', 'w-4 h-4') {{ $global_setting->warung_phone ?? '+62 812-3456-7890' }}
                             </a>
                         </li>
                         <li>
-                            <a href="https://wa.me/6281234567890" target="_blank" class="flex items-center gap-2 hover:text-white">
+                            @php $waNum = preg_replace('/[^0-9]/', '', $global_setting->warung_phone ?? '6281234567890'); if(str_starts_with($waNum, '0')) $waNum = '62' . substr($waNum, 1); @endphp
+                            <a href="https://wa.me/{{ $waNum }}" target="_blank" class="flex items-center gap-2 hover:text-white">
                                 @svg('heroicon-o-chat-bubble-left-ellipsis', 'w-4 h-4') WhatsApp
                             </a>
                         </li>
@@ -130,7 +131,7 @@
                     </h4>
                     <ul class="space-y-2 text-sm text-[#D7C2A0]">
                         <li class="flex items-center gap-2">
-                            @svg('heroicon-o-map-pin', 'w-4 h-4') Jl. Contoh No. 123, Yogyakarta
+                            @svg('heroicon-o-map-pin', 'w-4 h-4 shrink-0') <span>{{ $global_setting->warung_address ?? 'Jl. Contoh No. 123, Yogyakarta' }}</span>
                         </li>
                         <li class="flex items-center gap-2">
                             @svg('heroicon-o-clock', 'w-4 h-4') Senin - Minggu: 08.00 - 21.00 WIB
@@ -146,7 +147,7 @@
             </div>
 
             <div class="border-t border-[#9e8065] pt-4 text-center text-[#D7C2A0] text-sm">
-                &copy; {{ date('Y') }} Naliko Warung. All rights reserved.
+                &copy; {{ date('Y') }} {{ $global_setting->warung_name ?? 'Naliko Warung' }}. All rights reserved.
             </div>
         </div>
     </footer>

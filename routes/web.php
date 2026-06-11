@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\TransactionController;
 use App\Http\Controllers\Customer\MenuController;
@@ -35,6 +37,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('users', UserController::class);
     Route::get('orders', [ReportController::class, 'orders'])->name('admin.orders');
     Route::get('reports', [ReportController::class, 'index'])->name('admin.reports');
+    
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('admin.analytics');
+    Route::get('/settings', [SettingController::class, 'index'])->name('admin.settings');
+    Route::put('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
 });
 
 // Kasir routes
