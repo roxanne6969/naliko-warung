@@ -49,7 +49,7 @@ class TransactionController extends Controller
         }
 
         $metode = $request->metode ?? 'Cash';
-        if (!in_array($metode, ['Cash', 'QRIS', 'Debit'])) {
+        if (!in_array($metode, ['Cash', 'QRIS'])) {
             return response()->json(['success' => false, 'message' => 'Metode pembayaran tidak valid']);
         }
 
@@ -72,7 +72,7 @@ class TransactionController extends Controller
                         throw new \Exception('Uang bayar kurang! Total: Rp ' . number_format($total, 0, ',', '.') . ', Dibayar: Rp ' . number_format($paid, 0, ',', '.'));
                     }
                 } else {
-                    // QRIS / Debit: paid = total (uang pas, tidak ada kembalian)
+                    // QRIS : paid = total (uang pas, tidak ada kembalian)
                     $paid = $total;
                 }
 

@@ -109,7 +109,7 @@
         </div>
         <div class="flex-1">
             <h4 class="font-bold text-[#3E2F1E]">Riwayat Pesanan</h4>
-            <p class="text-[#9e8065] text-sm">Lihat daftar transaksi & cetak ulang</p>
+            <p class="text-[#9e8065] text-sm">Lihat daftar transaksi</p>
         </div>
         @svg('heroicon-o-chevron-right', 'w-5 h-5 text-[#c4a882] group-hover:text-[#5C4A35] transition')
     </a>

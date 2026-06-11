@@ -32,7 +32,6 @@
             <option value="">Semua Metode</option>
             <option value="Cash">Cash</option>
             <option value="QRIS">QRIS</option>
-            <option value="Debit">Debit</option>
         </select>
     </div>
 </div>
@@ -102,10 +101,6 @@
                         <button onclick="lihatDetail({{ $trx->id }})"
                             class="flex items-center gap-1 text-xs bg-[#f5e6d3] text-[#5C4A35] px-2.5 py-1.5 rounded-lg hover:bg-[#e8d5c1] transition">
                             @svg('heroicon-o-eye', 'w-3.5 h-3.5') Detail
-                        </button>
-                        <button onclick="cetakStruk({{ $trx->id }})"
-                            class="flex items-center gap-1 text-xs bg-[#5C4A35] text-[#F7E6CC] px-2.5 py-1.5 rounded-lg hover:bg-[#3E2F1E] transition">
-                            @svg('heroicon-o-printer', 'w-3.5 h-3.5') Cetak
                         </button>
                     </div>
                 </td>
@@ -197,16 +192,15 @@ function lihatDetail(id) {
                 <span class="text-[#9e8065]">Kembalian</span><span class="text-green-600 font-semibold">Rp ${fmt(trx.change)}</span>
             </div>
         </div>
-        <button onclick="cetakStruk(${trx.id})"
-            class="w-full mt-4 bg-[#5C4A35] text-[#F7E6CC] py-2.5 rounded-xl hover:bg-[#3E2F1E] transition font-semibold text-sm">
-            Cetak Struk
+        <button onclick="closeDetail()"
+             class="w-full mt-4 bg-[#5C4A35] text-[#F7E6CC] py-2.5 rounded-xl hover:bg-[#3E2F1E] transition font-semibold text-sm">
+            Tutup
         </button>
     `;
     document.getElementById('detail-modal').classList.remove('hidden');
 }
 
 function closeDetail() { document.getElementById('detail-modal').classList.add('hidden'); }
-function cetakStruk(id) { alert('Fitur cetak struk #' + id + ' coming soon!'); }
 function fmt(num) { return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 document.addEventListener('click', function(e) {
     if (e.target === document.getElementById('detail-modal')) closeDetail();

@@ -109,10 +109,6 @@
                     class="metode-btn border border-[#e8d5c1] text-[#9e8065] py-2 rounded-xl text-xs hover:border-[#5C4A35] transition flex flex-col items-center gap-1">
                     @svg('heroicon-o-qr-code', 'w-4 h-4') QRIS
                 </button>
-                <button onclick="setMetode('Debit', this)"
-                    class="metode-btn border border-[#e8d5c1] text-[#9e8065] py-2 rounded-xl text-xs hover:border-[#5C4A35] transition flex flex-col items-center gap-1">
-                    @svg('heroicon-o-credit-card', 'w-4 h-4') Debit
-                </button>
             </div>
         </div>
 
@@ -160,14 +156,10 @@
         <h3 class="text-xl font-bold text-[#3E2F1E] mb-1">Transaksi Berhasil!</h3>
         <p class="text-[#9e8065] text-sm mb-1">Total: <span id="modal-total" class="font-bold text-[#5C4A35]"></span></p>
         <p class="text-[#9e8065] text-sm mb-6">Kembalian: <span id="modal-change" class="font-bold text-green-600"></span></p>
-        <div class="flex gap-3">
+        <div class="flex">
             <button onclick="closeSuksesModal()"
-                class="flex-1 border border-[#e8d5c1] text-[#9e8065] py-2.5 rounded-xl hover:bg-[#fdf5ec] transition">
+                class="w-full border border-[#e8d5c1] text-[#9e8065] py-2.5 rounded-xl hover:bg-[#fdf5ec] transition">
                 Tutup
-            </button>
-            <button onclick="cetakStruk()"
-                class="flex-1 flex items-center justify-center gap-2 bg-[#5C4A35] text-[#F7E6CC] py-2.5 rounded-xl hover:bg-[#3E2F1E] transition font-semibold">
-                @svg('heroicon-o-printer', 'w-4 h-4') Cetak Struk
             </button>
         </div>
     </div>
@@ -339,10 +331,6 @@ function closeSuksesModal() {
     document.getElementById('sukses-modal').classList.add('hidden');
 }
 
-function cetakStruk() {
-    alert('Fitur cetak struk coming soon!');
-    closeSuksesModal();
-}
 </script>
 
 @endsection
