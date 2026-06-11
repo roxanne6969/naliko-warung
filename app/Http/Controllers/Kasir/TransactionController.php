@@ -26,12 +26,44 @@ class TransactionController extends Controller
         return view('kasir.orders', compact('orders'));
     }
 
-    public function confirm(Request $request, Order $order)
-    {
-        $status = $request->status;
-        $order->update(['status' => $status]);
-        return back()->with('success', 'Status pesanan diperbarui!');
+   public function confirm(Request $request, Order $order)
+{
+    $status = $request->status;
+    $order->update(['status' => $status]);
+
+    // Jika status done, otomatis buat transaksi
+    if ($status === 'done') {
+        // Cek apakah transaksi sudah ada untuk order ini
+        $existing = Transaction::where('order_id', $order->id)->first();
+        
+        if (!$existing) {
+            $transaction = Transaction::create([
+                'user_id' => auth()->id(),
+                'order_id' => $order->id,
+                'total' => $order->total,
+                'paid' => $order->total, // anggap sudah dibayar
+                'change' => 0,
+                'metode' => 'Cash',
+            ]);
+
+            // Simpan transaction items dari order items
+            foreach ($order->items as $item) {
+                TransactionItem::create([
+                    'transaction_id' => $transaction->id,
+                    'product_id' => $item->product_id,
+                    'qty' => $item->qty,
+                    'price' => $item->price,
+                ]);
+
+                // Kurangi stok
+                \App\Models\Product::find($item->product_id)
+                    ->decrement('stock', $item->qty);
+            }
+        }
     }
+
+    return back()->with('success', 'Status pesanan diperbarui!');
+}
 
     public function store(Request $request)
     {
