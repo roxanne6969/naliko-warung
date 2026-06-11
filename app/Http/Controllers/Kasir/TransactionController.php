@@ -29,12 +29,14 @@ class TransactionController extends Controller
 
     public function confirm(Request $request, Order $order)
     {
-        $status = $request->status;
-        $order->update(['status' => $status]);
+        $request->validate([
+            'status' => 'required|in:pending,confirmed,ready,done',
+        ]);
+
+        $order->update(['status' => $request->status]);
 
         // Catatan: Transaksi & pengurangan stok sudah dilakukan di PaymentVerifController
         // saat kasir memverifikasi pembayaran (Approve).
-
 
         return back()->with('success', 'Status pesanan diperbarui!');
     }
@@ -46,8 +48,13 @@ class TransactionController extends Controller
             return response()->json(['success' => false, 'message' => 'Keranjang kosong']);
         }
 
+        $metode = $request->metode ?? 'Cash';
+        if (!in_array($metode, ['Cash', 'QRIS', 'Debit'])) {
+            return response()->json(['success' => false, 'message' => 'Metode pembayaran tidak valid']);
+        }
+
         try {
-            $transaction_id = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $items) {
+            $transaction_id = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $items, $metode) {
                 // Validasi stok dan hitung total
                 $total = 0;
                 foreach ($items as $item) {
@@ -58,13 +65,24 @@ class TransactionController extends Controller
                     $total += $product->price * $item['qty'];
                 }
 
+                // Validasi pembayaran berdasarkan metode
+                if ($metode === 'Cash') {
+                    $paid = intval($request->paid);
+                    if ($paid < $total) {
+                        throw new \Exception('Uang bayar kurang! Total: Rp ' . number_format($total, 0, ',', '.') . ', Dibayar: Rp ' . number_format($paid, 0, ',', '.'));
+                    }
+                } else {
+                    // QRIS / Debit: paid = total (uang pas, tidak ada kembalian)
+                    $paid = $total;
+                }
+
                 $transaction = Transaction::create([
                     'user_id' => auth()->id(),
                     'order_id' => $request->order_id ?? null,
                     'total' => $total,
-                    'paid' => $request->paid,
-                    'change' => $request->paid - $total,
-                    'metode' => $request->metode ?? 'Cash',
+                    'paid' => $paid,
+                    'change' => $paid - $total,
+                    'metode' => $metode,
                 ]);
 
                 foreach ($items as $item) {

@@ -60,13 +60,13 @@
                             <p class="text-[#9e8065] text-xs">Scan QR di kasir</p>
                         </div>
                     </div>
-                    <div class="flex gap-3 items-center">
+                    <!-- <div class="flex gap-3 items-center">
                         @svg('heroicon-o-building-library', 'w-5 h-5 text-[#5C4A35] flex-shrink-0')
                         <div>
                             <p class="font-semibold text-[#3E2F1E]">Transfer BCA · 1234567890</p>
                             <p class="text-[#9e8065] text-xs">a.n. Naliko Warung</p>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="flex gap-3 items-center">
                         @svg('heroicon-o-banknotes', 'w-5 h-5 text-[#5C4A35] flex-shrink-0')
                         <div>
@@ -85,7 +85,7 @@
                 <div class="mb-4">
                     <label class="text-sm font-semibold text-[#3E2F1E] mb-2 block">Metode Pembayaran</label>
                     <div class="grid grid-cols-3 gap-2">
-                        @foreach(['QRIS', 'Transfer', 'Cash'] as $method)
+                        @foreach(['QRIS', 'Cash'] as $method)
                         <label class="cursor-pointer">
                             <input type="radio" name="payment_method" value="{{ $method }}"
                                 class="hidden peer" {{ old('payment_method') === $method ? 'checked' : '' }}>
@@ -96,10 +96,7 @@
                                     <div class="flex flex-col items-center gap-1">
                                         @svg('heroicon-o-qr-code', 'w-4 h-4') {{ $method }}
                                     </div>
-                                @elseif($method === 'Transfer')
-                                    <div class="flex flex-col items-center gap-1">
-                                        @svg('heroicon-o-building-library', 'w-4 h-4') {{ $method }}
-                                    </div>
+                                
                                 @else
                                     <div class="flex flex-col items-center gap-1">
                                         @svg('heroicon-o-banknotes', 'w-4 h-4') {{ $method }}
@@ -138,8 +135,17 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full flex items-center justify-center gap-2 bg-[#5C4A35] text-[#F7E6CC] py-3.5 rounded-xl font-bold text-lg hover:bg-[#3E2F1E] transition">
-                    @svg('heroicon-o-paper-airplane', 'w-5 h-5') Kirim Bukti Pembayaran
+                    class="w-full flex items-center justify-center bg-[#5C4A35] text-[#F7E6CC] py-3.5 rounded-xl font-bold text-lg hover:bg-[#3E2F1E] transition">
+                    
+                    <!-- Teks untuk QRIS -->
+                    <span id="btn-text-qris" class="flex items-center gap-2">
+                        @svg('heroicon-o-paper-airplane', 'w-5 h-5') Kirim Bukti Pembayaran
+                    </span>
+
+                    <!-- Teks untuk Cash -->
+                    <span id="btn-text-cash" class="flex items-center gap-2 hidden">
+                        Lanjut @svg('heroicon-o-arrow-right', 'w-5 h-5')
+                    </span>
                 </button>
             </form>
 
@@ -164,13 +170,35 @@ function previewImage(input) {
 document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
     radio.addEventListener('change', function() {
         const uploadDiv = document.getElementById('upload-section');
+        const btnQris = document.getElementById('btn-text-qris');
+        const btnCash = document.getElementById('btn-text-cash');
+
         if (this.value === 'Cash') {
+            // Sembunyikan form upload
             uploadDiv.classList.add('hidden');
             document.getElementById('proof-input').value = "";
+            
+            // Ubah tombol jadi "Lanjut"
+            btnQris.classList.add('hidden');
+            btnCash.classList.remove('hidden');
         } else {
+            // Munculkan form upload
             uploadDiv.classList.remove('hidden');
+            
+            // Kembalikan tombol jadi "Kirim Bukti"
+            btnQris.classList.remove('hidden');
+            btnCash.classList.add('hidden');
         }
     });
+});
+
+// Tambahan: Trigger script otomatis saat halaman dimuat
+// Berguna misal user milih Cash, klik submit, tapi error, biar tombolnya nggak balik ke QRIS.
+window.addEventListener('load', function() {
+    const checkedRadio = document.querySelector('input[name="payment_method"]:checked');
+    if (checkedRadio) {
+        checkedRadio.dispatchEvent(new Event('change'));
+    }
 });
 </script>
 

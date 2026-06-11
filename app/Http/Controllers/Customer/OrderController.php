@@ -69,6 +69,10 @@ class OrderController extends Controller
 
     public function status(Order $order)
     {
+        if (session('customer_order_id') !== $order->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $order->load('items.product');
         return view('customer.status', compact('order'));
     }
