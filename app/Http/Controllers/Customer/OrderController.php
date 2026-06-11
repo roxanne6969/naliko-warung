@@ -34,6 +34,7 @@ class OrderController extends Controller
             'note' => $request->note,
             'status' => 'pending',
             'total' => $total,
+            'payment_status' => 'unpaid',
         ]);
 
         foreach ($items as $item) {

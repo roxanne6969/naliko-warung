@@ -169,7 +169,7 @@
         .then(res => {
             if (res.success) {
                 localStorage.removeItem('cart');
-                window.location.href = '/order/' + res.order_id + '/status';
+                window.location.href = '/order/' + res.order_id + '/payment';
             } else {
                 alert('Gagal memesan, coba lagi!');
             }

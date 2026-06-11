@@ -101,4 +101,57 @@
                         👁️ Detail
                     </button>
                     <button onclick="cetakStruk({{ $trx->id }})"
-                        class="te
+                        class="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-lg hover:bg-orange-200">
+                        🖨️ Cetak
+                    </button>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="9" class="text-center py-10 text-gray-400">
+                    <p class="text-4xl mb-3">📋</p>
+                    <p>Belum ada riwayat transaksi</p>
+                </td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+{{-- Pagination --}}
+<div class="mt-6">
+    {{ $transactions->links() }}
+</div>
+
+{{-- JavaScript --}}
+<script>
+function filterTable() {
+    const search = document.getElementById('search').value.toLowerCase();
+    const date = document.getElementById('filter-date').value;
+    const metode = document.getElementById('filter-metode').value;
+    const rows = document.querySelectorAll('.trx-row');
+
+    rows.forEach(row => {
+        const kasir = row.dataset.kasir || '';
+        const rowDate = row.dataset.date || '';
+        const rowMetode = row.dataset.metode || '';
+
+        let show = true;
+        if (search && !kasir.includes(search)) show = false;
+        if (date && rowDate !== date) show = false;
+        if (metode && rowMetode !== metode) show = false;
+
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+function lihatDetail(id) {
+    alert('Detail transaksi #' + id + ' — fitur segera hadir!');
+}
+
+function cetakStruk(id) {
+    alert('Cetak struk transaksi #' + id + ' — fitur segera hadir!');
+}
+</script>
+
+@endsection

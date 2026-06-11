@@ -12,19 +12,19 @@
 {{-- Stats --}}
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
     <div class="bg-white rounded-2xl shadow p-5 text-center">
+        <div class="text-3xl mb-2">💳</div>
+        <p class="text-gray-400 text-sm">Menunggu Verifikasi</p>
+        <p class="font-bold text-2xl text-red-500">{{ \App\Models\Order::where('payment_status', 'waiting_verification')->count() }}</p>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-5 text-center">
         <div class="text-3xl mb-2">🔔</div>
         <p class="text-gray-400 text-sm">Pesanan Pending</p>
-        <p class="font-bold text-2xl text-yellow-500">{{ \App\Models\Order::where('status', 'pending')->count() }}</p>
+        <p class="font-bold text-2xl text-yellow-500">{{ \App\Models\Order::where('status', 'pending')->where('payment_status', 'paid')->count() }}</p>
     </div>
     <div class="bg-white rounded-2xl shadow p-5 text-center">
         <div class="text-3xl mb-2">👨‍🍳</div>
         <p class="text-gray-400 text-sm">Sedang Diproses</p>
-        <p class="font-bold text-2xl text-blue-500">{{ \App\Models\Order::where('status', 'confirmed')->count() }}</p>
-    </div>
-    <div class="bg-white rounded-2xl shadow p-5 text-center">
-        <div class="text-3xl mb-2">✅</div>
-        <p class="text-gray-400 text-sm">Siap Diantar</p>
-        <p class="font-bold text-2xl text-green-500">{{ \App\Models\Order::where('status', 'ready')->count() }}</p>
+        <p class="font-bold text-2xl text-blue-500">{{ \App\Models\Order::where('status', 'confirmed')->where('payment_status', 'paid')->count() }}</p>
     </div>
     <div class="bg-white rounded-2xl shadow p-5 text-center">
         <div class="text-3xl mb-2">💰</div>
@@ -37,31 +37,55 @@
 <h3 class="text-lg font-bold text-gray-700 mb-4">Menu Utama</h3>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
 
-    {{-- Menu 1: Pesanan Online --}}
+    {{-- Menu 1: Verifikasi Pembayaran --}}
+    @php $verifCount = \App\Models\Order::where('payment_status', 'waiting_verification')->count(); @endphp
+    <a href="{{ route('kasir.payment.index') }}"
+        class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition flex items-center gap-4 group border-2 {{ $verifCount > 0 ? 'border-red-200 bg-red-50' : 'border-transparent' }}">
+        <div class="bg-red-100 rounded-xl p-4 text-3xl group-hover:bg-red-200 transition relative">
+            💳
+            @if($verifCount > 0)
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
+                    {{ $verifCount }}
+                </span>
+            @endif
+        </div>
+        <div class="flex-1">
+            <div class="flex items-center gap-2">
+                <h4 class="font-bold text-gray-800">Verifikasi Pembayaran</h4>
+                @if($verifCount > 0)
+                    <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full font-semibold">{{ $verifCount }} menunggu</span>
+                @endif
+            </div>
+            <p class="text-gray-400 text-sm">Cek bukti bayar dari pelanggan</p>
+        </div>
+        <span class="text-gray-300 group-hover:text-orange-400 transition text-xl">→</span>
+    </a>
+
+    {{-- Menu 2: Pesanan Online --}}
+    @php $paidPendingCount = \App\Models\Order::whereIn('status', ['pending','confirmed','ready'])->where('payment_status', 'paid')->count(); @endphp
     <a href="{{ route('kasir.orders') }}"
         class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition flex items-center gap-4 group">
         <div class="bg-yellow-100 rounded-xl p-4 text-3xl group-hover:bg-yellow-200 transition relative">
             🔔
-            @php $pendingCount = \App\Models\Order::where('status', 'pending')->count(); @endphp
-            @if($pendingCount > 0)
+            @if($paidPendingCount > 0)
                 <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                    {{ $pendingCount }}
+                    {{ $paidPendingCount }}
                 </span>
             @endif
         </div>
         <div class="flex-1">
             <div class="flex items-center gap-2">
                 <h4 class="font-bold text-gray-800">Pesanan Online</h4>
-                @if($pendingCount > 0)
-                    <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{{ $pendingCount }} baru</span>
+                @if($paidPendingCount > 0)
+                    <span class="bg-yellow-100 text-yellow-600 text-xs px-2 py-0.5 rounded-full">{{ $paidPendingCount }} aktif</span>
                 @endif
             </div>
-            <p class="text-gray-400 text-sm">Terima & proses pesanan pelanggan</p>
+            <p class="text-gray-400 text-sm">Terima & proses pesanan yang sudah bayar</p>
         </div>
         <span class="text-gray-300 group-hover:text-orange-400 transition text-xl">→</span>
     </a>
 
-    {{-- Menu 2: Manajemen Stok --}}
+    {{-- Menu 3: Manajemen Stok --}}
     <a href="{{ route('products.index') }}"
         class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition flex items-center gap-4 group">
         <div class="bg-blue-100 rounded-xl p-4 text-3xl group-hover:bg-blue-200 transition">📦</div>
@@ -72,10 +96,10 @@
         <span class="text-gray-300 group-hover:text-orange-400 transition text-xl">→</span>
     </a>
 
-    {{-- Menu 3: Pesanan Offline --}}
+    {{-- Menu 4: Pesanan Offline --}}
     <a href="{{ route('kasir.transaction') }}"
         class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition flex items-center gap-4 group">
-        <div class="bg-orange-100 rounded-xl p-4 text-3xl group-hover:bg-orange-200 transition">💳</div>
+        <div class="bg-orange-100 rounded-xl p-4 text-3xl group-hover:bg-orange-200 transition">🧾</div>
         <div class="flex-1">
             <h4 class="font-bold text-gray-800">Pesanan Offline</h4>
             <p class="text-gray-400 text-sm">Transaksi langsung di kasir</p>
@@ -83,7 +107,7 @@
         <span class="text-gray-300 group-hover:text-orange-400 transition text-xl">→</span>
     </a>
 
-    {{-- Menu 4: Riwayat Pesanan --}}
+    {{-- Menu 5: Riwayat Pesanan --}}
     <a href="{{ route('kasir.history') }}"
         class="bg-white rounded-2xl shadow p-6 hover:shadow-md transition flex items-center gap-4 group">
         <div class="bg-green-100 rounded-xl p-4 text-3xl group-hover:bg-green-200 transition">📋</div>
@@ -97,7 +121,7 @@
 </div>
 
 {{-- Pesanan Masuk --}}
-@php $activeOrders = \App\Models\Order::whereIn('status', ['pending','confirmed','ready'])->latest()->take(5)->get(); @endphp
+@php $activeOrders = \App\Models\Order::whereIn('status', ['pending','confirmed','ready'])->where('payment_status', 'paid')->latest()->take(5)->get(); @endphp
 @if($activeOrders->count() > 0)
 <div class="bg-white rounded-2xl shadow p-6">
     <div class="flex justify-between items-center mb-4">

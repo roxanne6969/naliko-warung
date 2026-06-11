@@ -2,7 +2,9 @@
 
 @section('title', 'Pesanan Masuk - Kasir')
 
+
 @section('content')
+{{ dd($orders->count(), $orders->pluck('id')) }}
 
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold text-gray-800">🔔 Pesanan Masuk</h2>
@@ -33,12 +35,20 @@
                         <p class="text-orange-500 text-sm mt-1">📝 {{ $order->note }}</p>
                     @endif
                 </div>
-                <span class="px-3 py-1 rounded-full text-xs font-semibold
-                    @if($order->status === 'pending') bg-yellow-100 text-yellow-600
-                    @elseif($order->status === 'confirmed') bg-blue-100 text-blue-600
-                    @else bg-green-100 text-green-600 @endif">
-                    {{ ucfirst($order->status) }}
-                </span>
+                <div class="text-right space-y-1">
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold
+                        @if($order->status === 'pending') bg-yellow-100 text-yellow-600
+                        @elseif($order->status === 'confirmed') bg-blue-100 text-blue-600
+                        @else bg-green-100 text-green-600 @endif">
+                        {{ ucfirst($order->status) }}
+                    </span>
+                    <br>
+                    <span class="px-2 py-0.5 rounded-full text-xs font-semibold
+                        @if($order->payment_status === 'paid') bg-green-100 text-green-600
+                        @else bg-yellow-100 text-yellow-600 @endif">
+                        💳 {{ $order->payment_status === 'paid' ? 'Lunas' : ucfirst($order->payment_status) }}
+                    </span>
+                </div>
             </div>
 
             {{-- Items --}}

@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Kasir\TransactionController;
 use App\Http\Controllers\Customer\MenuController;
 use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\PaymentController;
+use App\Http\Controllers\Kasir\PaymentVerifController;
+
 
 // Public routes (pelanggan)
 Route::get('/', [MenuController::class, 'index'])->name('menu');
@@ -15,6 +18,8 @@ Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
 Route::get('/cart', [OrderController::class, 'cart'])->name('cart');
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 Route::get('/order/{order}/status', [OrderController::class, 'status'])->name('order.status');
+Route::get('/order/{order}/payment', [PaymentController::class, 'show'])->name('order.payment');
+Route::post('/order/{order}/payment', [PaymentController::class, 'upload'])->name('order.payment.upload');
 
 // Auth routes (Breeze)
 require __DIR__.'/auth.php';
@@ -45,4 +50,6 @@ Route::prefix('kasir')->middleware(['auth', 'kasir'])->group(function () {
     Route::get('/history', [TransactionController::class, 'history'])->name('kasir.history');
     Route::get('/stok', [TransactionController::class, 'stok'])->name('kasir.stok');
     Route::post('/stok/{product}', [TransactionController::class, 'updateStok'])->name('kasir.stok.update');
+    Route::get('/payment', [PaymentVerifController::class, 'index'])->name('kasir.payment.index');
+    Route::post('/payment/{order}/verify', [PaymentVerifController::class, 'verify'])->name('kasir.payment.verify');
 });
