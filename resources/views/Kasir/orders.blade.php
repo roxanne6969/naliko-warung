@@ -65,16 +65,16 @@
             Semua
         </button>
         <button onclick="filterStatus('pending', this)"
-            class="status-btn px-4 py-1.5 rounded-full bg-white text-[#9e8065] text-sm border border-[#e8d5c1] hover:border-[#5C4A35] transition">
-            @svg('heroicon-o-clock', 'w-3.5 h-3.5 inline -mt-0.5') Pending
+            class="status-btn px-4 py-1.5 rounded-full bg-white text-[#9e8065] text-sm border border-[#e8d5c1]">
+            Pending
         </button>
         <button onclick="filterStatus('confirmed', this)"
-            class="status-btn px-4 py-1.5 rounded-full bg-white text-[#9e8065] text-sm border border-[#e8d5c1] hover:border-[#5C4A35] transition">
-            @svg('heroicon-o-fire', 'w-3.5 h-3.5 inline -mt-0.5') Diproses
+            class="status-btn px-4 py-1.5 rounded-full bg-white text-[#9e8065] text-sm border border-[#e8d5c1]">
+            Diproses
         </button>
         <button onclick="filterStatus('ready', this)"
-            class="status-btn px-4 py-1.5 rounded-full bg-white text-[#9e8065] text-sm border border-[#e8d5c1] hover:border-[#5C4A35] transition">
-            @svg('heroicon-o-check-badge', 'w-3.5 h-3.5 inline -mt-0.5') Siap Diantar
+            class="status-btn px-4 py-1.5 rounded-full bg-white text-[#9e8065] text-sm border border-[#e8d5c1]">
+            Siap Diantar
         </button>
     </div>
 
@@ -91,17 +91,16 @@
                         <span class="text-[#9e8065] text-sm">#{{ $order->id }}</span>
                     </div>
                     <div class="flex gap-3 text-[#9e8065] text-xs mt-1 ml-6">
-                        <span class="flex items-center gap-1">
-                            @svg('heroicon-o-table-cells', 'w-3.5 h-3.5') {{ $order->table_number ?? 'Tanpa meja' }}
-                        </span>
-                        <span class="flex items-center gap-1">
-                            @svg('heroicon-o-clock', 'w-3.5 h-3.5') {{ $order->created_at->diffForHumans() }}
-                        </span>
+                        <span>{{ $order->table_number ?? 'Tanpa meja' }}</span>
+                        <span>{{ $order->created_at->diffForHumans() }}</span>
+                        @if(isset($order->payment_method))
+                            <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full font-semibold">
+                                {{ $order->payment_method }}
+                            </span>
+                        @endif
                     </div>
                     @if($order->note)
-                        <p class="text-[#5C4A35] text-sm mt-1 ml-6 flex items-center gap-1">
-                            @svg('heroicon-o-document-text', 'w-3.5 h-3.5') {{ $order->note }}
-                        </p>
+                        <p class="text-[#5C4A35] text-sm mt-1 ml-6">{{ $order->note }}</p>
                     @endif
                 </div>
                 <div class="text-right space-y-1">
@@ -114,7 +113,7 @@
                     <span class="px-2 py-0.5 rounded-full text-xs font-semibold block
                         @if($order->payment_status === 'paid') bg-green-100 text-green-700
                         @else bg-yellow-100 text-yellow-700 @endif">
-                        {{ $order->payment_status === 'paid' ? 'Lunas' : ucfirst($order->payment_status) }}
+                        {{ $order->payment_status === 'paid' ? '✅ Lunas' : '⏳ Belum Bayar' }}
                     </span>
                 </div>
             </div>
@@ -135,6 +134,20 @@
                     <span>Rp {{ number_format($order->total, 0, ',', '.') }}</span>
                 </div>
             </div>
+
+            {{-- Bukti Pembayaran --}}
+            @if($order->payment_proof)
+            <div class="mb-4">
+                <p class="text-xs text-[#9e8065] mb-2 font-semibold uppercase tracking-wide">Bukti Pembayaran</p>
+                <div class="border border-[#e8d5c1] rounded-xl overflow-hidden">
+                    <img src="{{ asset('storage/' . $order->payment_proof) }}" 
+                        alt="Bukti Pembayaran"
+                        class="w-full max-h-48 object-contain cursor-pointer bg-[#fdfaf7]"
+                        onclick="lihatBukti('{{ asset('storage/' . $order->payment_proof) }}')">
+                    <p class="text-xs text-center text-[#9e8065] py-1">Klik gambar untuk memperbesar</p>
+                </div>
+            </div>
+            @endif
 
             {{-- Aksi --}}
             <div class="flex gap-2">
@@ -173,10 +186,21 @@
                     </form>
                 @endif
             </div>
+
         </div>
         @endforeach
     </div>
 @endif
+
+{{-- Modal Lihat Bukti --}}
+<div id="bukti-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50 flex items-center justify-center p-4"
+    onclick="closeBukti()">
+    <div class="relative max-w-lg w-full">
+        <button onclick="closeBukti()" 
+            class="absolute -top-10 right-0 text-white text-xl hover:text-gray-300">✕ Tutup</button>
+        <img id="bukti-img" src="" alt="Bukti Pembayaran" class="w-full rounded-2xl shadow-xl">
+    </div>
+</div>
 
 {{-- Auto refresh setiap 15 detik --}}
 <script>
@@ -192,6 +216,15 @@
         });
         btn.classList.add('bg-[#5C4A35]', 'text-[#F7E6CC]');
         btn.classList.remove('bg-white', 'text-[#9e8065]', 'border', 'border-[#e8d5c1]');
+    }
+
+    function lihatBukti(url) {
+        document.getElementById('bukti-img').src = url;
+        document.getElementById('bukti-modal').classList.remove('hidden');
+    }
+
+    function closeBukti() {
+        document.getElementById('bukti-modal').classList.add('hidden');
     }
 </script>
 

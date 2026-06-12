@@ -53,13 +53,13 @@
                     @svg('heroicon-o-information-circle', 'w-4 h-4 text-[#5C4A35]') Informasi Pembayaran
                 </p>
                 <div class="space-y-2.5 text-sm">
-                    <div class="flex gap-3 items-center">
+                    <!-- <div class="flex gap-3 items-center">
                         @svg('heroicon-o-qr-code', 'w-5 h-5 text-[#5C4A35] flex-shrink-0')
                         <div>
                             <p class="font-semibold text-[#3E2F1E]">QRIS</p>
                             <p class="text-[#9e8065] text-xs">Scan QR di kasir</p>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="flex gap-3 items-center">
                         @svg('heroicon-o-building-library', 'w-5 h-5 text-[#5C4A35] flex-shrink-0')
                         <div>
@@ -110,9 +110,23 @@
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+                    {{-- Tampilan QRIS --}}
+                    <div class="mb-5 hidden" id="qris-section">
+                        <label class="text-sm font-semibold text-[#3E2F1E] mb-2 block">
+                            Scan QRIS Berikut
+                        </label>
+                        <div class="border-2 border-[#e8d5c1] rounded-xl p-4 text-center bg-[#fdfaf7]">
+                            <img src="{{ asset('images/qris.png') }}" alt="QRIS Naliko Warung" 
+                                class="mx-auto max-h-64 rounded-xl mb-3">
+                            <p class="text-[#9e8065] text-xs">Scan QR di atas menggunakan aplikasi pembayaran kamu</p>
+                            <p class="text-[#5C4A35] font-bold text-sm mt-1">
+                                Total: Rp {{ number_format($order->total, 0, ',', '.') }}
+                            </p>
+                        </div>
+                    </div>
 
-                {{-- Upload Foto --}}
-                <div class="mb-5" id="upload-section">
+                    {{-- Upload Foto --}}
+                    <div class="mb-5 hidden" id="upload-section">
                     <label class="text-sm font-semibold text-[#3E2F1E] mb-2 block">
                         Upload Bukti Pembayaran
                     </label>
@@ -170,27 +184,30 @@ function previewImage(input) {
 document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
     radio.addEventListener('change', function() {
         const uploadDiv = document.getElementById('upload-section');
+        const qrisDiv = document.getElementById('qris-section');
         const btnQris = document.getElementById('btn-text-qris');
         const btnCash = document.getElementById('btn-text-cash');
 
         if (this.value === 'Cash') {
-            // Sembunyikan form upload
+            // Sembunyikan QRIS & upload
+            qrisDiv.classList.add('hidden');
             uploadDiv.classList.add('hidden');
             document.getElementById('proof-input').value = "";
-            
+
             // Ubah tombol jadi "Lanjut"
             btnQris.classList.add('hidden');
             btnCash.classList.remove('hidden');
         } else {
-            // Munculkan form upload
+            // Tampilkan QRIS & upload
+            qrisDiv.classList.remove('hidden');
             uploadDiv.classList.remove('hidden');
-            
+
             // Kembalikan tombol jadi "Kirim Bukti"
             btnQris.classList.remove('hidden');
             btnCash.classList.add('hidden');
         }
     });
-});
+});     
 
 // Tambahan: Trigger script otomatis saat halaman dimuat
 // Berguna misal user milih Cash, klik submit, tapi error, biar tombolnya nggak balik ke QRIS.
