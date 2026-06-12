@@ -58,5 +58,4 @@ php artisan key:generate
 php artisan migrate --seed
 
 ### 6. Menjalankan Server Lokal Laravel
-php artisan serve
-
+php artisan serve & npm run dev
